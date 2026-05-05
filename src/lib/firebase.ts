@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 import {
   browserLocalPersistence,
   getAuth,
@@ -7,20 +7,30 @@ import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   type User,
-} from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY as string,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN as string,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID as string,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET as string,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID as string,
+  messagingSenderId: import.meta.env
+    .VITE_FIREBASE_MESSAGING_SENDER_ID as string,
   appId: import.meta.env.VITE_FIREBASE_APP_ID as string,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID as string | undefined,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID as
+    | string
+    | undefined,
 };
 
-export const isConfigured = Object.values(firebaseConfig).every(Boolean);
+export const isConfigured = Boolean(
+  firebaseConfig.apiKey &&
+  firebaseConfig.authDomain &&
+  firebaseConfig.projectId &&
+  firebaseConfig.storageBucket &&
+  firebaseConfig.messagingSenderId &&
+  firebaseConfig.appId,
+);
 
 export const app = isConfigured ? initializeApp(firebaseConfig) : null;
 export const auth = app ? getAuth(app) : null;
@@ -49,7 +59,7 @@ export async function getCurrentUser(): Promise<AppUser | null> {
 
 export async function signInWithPassword(email: string, password: string) {
   if (!auth) {
-    return { user: null, error: new Error('Firebase nao configurado.') };
+    return { user: null, error: new Error("Firebase nao configurado.") };
   }
 
   try {
